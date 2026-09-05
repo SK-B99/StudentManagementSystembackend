@@ -4,7 +4,6 @@ import { createObserveModule } from '@nestjs/observe';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
-
 export const { ObserveModule, ObserveInstrument } =
   createObserveModule();
 
@@ -16,8 +15,8 @@ export const { ObserveModule, ObserveInstrument } =
     // Distributed tracing, auto-correlated logs, request/job metrics,
     // error telemetry, alarms, and more.
    ObserveModule.forRoot({
-  appKey: process.env.OBSERVE_APP_KEY,
-  appSecret: process.env.OBSERVE_APP_SECRET,
+  appKey: process.env.OBSERVE_APP_KEY!,
+  appSecret: process.env.OBSERVE_APP_SECRET!,
   serviceId: process.env.OBSERVE_SERVICE_ID ?? 'student_records',
 }),
 
