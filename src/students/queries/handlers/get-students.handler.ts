@@ -22,10 +22,14 @@ export class GetStudentsHandler
       department,
       program,
       page = 1,
-      limit = 10,
+      limit = 5,
     } = query.filters;
 
-    const skip = (page - 1) * limit;
+    
+    const pageNumber = Number(page);
+    const limitNumber = Number(limit);
+
+    const skip = (pageNumber - 1) * limitNumber;
 
     const where = {
       ...(department && {
@@ -70,7 +74,7 @@ export class GetStudentsHandler
       this.prisma.student.findMany({
         where,
         skip,
-        take: limit,
+        take: limitNumber,
         orderBy: {
           createdAt: 'desc',
         },
@@ -85,9 +89,9 @@ export class GetStudentsHandler
       data: students,
       meta: {
         total,
-        page,
-        limit,
-        totalPages: Math.ceil(total / limit),
+        page: pageNumber,
+        limit: limitNumber,
+        totalPages: Math.ceil(total / limitNumber),
       },
     };
   }

@@ -8,6 +8,7 @@ import {
   SwaggerModule,
 } from '@nestjs/swagger';
 import helmet from 'helmet';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const port = process.env.PORT ?? 4000;
@@ -17,20 +18,24 @@ async function bootstrap() {
     instrument: ObserveInstrument,
   });
 
-  // Security headers
   app.use(helmet());
 
-  // Global API prefix
   app.setGlobalPrefix('api');
 
-  // CORS
   app.enableCors({
     origin:
       process.env.FRONTEND_URL ?? 'http://localhost:3000',
     credentials: true,
   });
 
-  // Swagger configuration
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
+
   const config = new DocumentBuilder()
     .setTitle('Student Management System API')
     .setDescription(
@@ -40,25 +45,23 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
 
-  // Generate Swagger document
   const document = SwaggerModule.createDocument(
     app,
     config,
   );
 
-  // Swagger UI
   SwaggerModule.setup('api/docs', app, document);
 
-  // Start application
   await app.listen(port);
 
-  // Console logs
   console.log('');
   console.log('==========================================');
   console.log('Student Management System API');
   console.log('==========================================');
   console.log(` App:     ${host}:${port}/api`);
-  console.log(` SwaggerApi: ${host}:${port}/api/docs`);
+  console.log(
+    ` SwaggerApi: ${host}:${port}/api/docs`,
+  );
   console.log('==========================================');
   console.log('');
 }
