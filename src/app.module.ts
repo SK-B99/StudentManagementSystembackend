@@ -4,7 +4,7 @@ import { createObserveModule } from '@nestjs/observe';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
-import { StudentsModule } from '../students/students.module';
+import { StudentsModule } from './students/students.module';
 import { CqrsModule } from '@nestjs/cqrs';
 export const { ObserveModule, ObserveInstrument } =
   createObserveModule();
