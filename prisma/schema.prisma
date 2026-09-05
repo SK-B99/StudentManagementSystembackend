@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Student {
+  id             Int      @id @default(autoincrement())
+  studentId      String   @unique
+  firstName      String
+  lastName       String
+  email          String   @unique
+  phone          String?
+  dateOfBirth    DateTime?
+  gender         String?
+  department     String?
+  program        String?
+  enrollmentDate DateTime?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([lastName])
+  @@index([department])
+  @@index([program])
+}
