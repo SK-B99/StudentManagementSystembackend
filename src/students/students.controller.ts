@@ -10,6 +10,13 @@ import {
   Query,
 } from '@nestjs/common';
 import {
+  ApiOperation,
+  ApiParam,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import {
   CommandBus,
   QueryBus,
 } from '@nestjs/cqrs';
@@ -25,6 +32,7 @@ import { DeleteStudentCommand } from './commands/delete-student.command';
 import { GetStudentQuery } from './queries/get-student.query';
 import { GetStudentsQuery } from './queries/get-students.query';
 
+@ApiTags('Students')
 @Controller('students')
 export class StudentsController {
   constructor(
@@ -33,6 +41,18 @@ export class StudentsController {
   ) {}
 
   @Post()
+  @ApiOperation({
+    summary: 'Create a student',
+    description: 'Creates a new student.',
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Student created successfully.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid request data.',
+  })
   async create(
     @Body() dto: CreateStudentDto,
   ) {
@@ -42,6 +62,18 @@ export class StudentsController {
   }
 
   @Get()
+  @ApiOperation({
+    summary: 'Get all students',
+    description: 'Returns a list of students based on the supplied filters.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Students retrieved successfully.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid query parameters.',
+  })
   async findAll(
     @Query() query: FindStudentsDto,
   ) {
@@ -51,6 +83,28 @@ export class StudentsController {
   }
 
   @Get(':id')
+  @ApiOperation({
+    summary: 'Get a student',
+    description: 'Returns a single student by ID.',
+  })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'The unique ID of the student.',
+    example: 1,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Student retrieved successfully.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid student ID.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Student not found.',
+  })
   async findOne(
     @Param('id', ParseIntPipe) id: number,
   ) {
@@ -60,6 +114,28 @@ export class StudentsController {
   }
 
   @Patch(':id')
+  @ApiOperation({
+    summary: 'Update a student',
+    description: 'Updates an existing student by ID.',
+  })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'The unique ID of the student.',
+    example: 1,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Student updated successfully.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid student ID or request data.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Student not found.',
+  })
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateStudentDto,
@@ -70,6 +146,28 @@ export class StudentsController {
   }
 
   @Delete(':id')
+  @ApiOperation({
+    summary: 'Delete a student',
+    description: 'Deletes an existing student by ID.',
+  })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'The unique ID of the student.',
+    example: 1,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Student deleted successfully.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid student ID.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Student not found.',
+  })
   async remove(
     @Param('id', ParseIntPipe) id: number,
   ) {
